@@ -9,5 +9,5 @@ if __name__ == "__main__":
     board = Board(3, 3, 3, 3)
     mymap = np.array([[0,3,3],[1,1,0],[2,0,2]])
     board.Create_One_Board(mymap)
-    print(board.maplist)           # 生成一个指定的图案
+    print(board.map)
     
