@@ -5,13 +5,10 @@ class Pattern(object):
     def __init__(self, Number=0, Position=np.array([0, 0]), Parent=None):
         self.number = Number                  # 图案编号
         self.position = Position              # 位置信息
-        self.turntimes = 0                    # 转弯次数
+        self.turntimes = -1                   # 转弯次数
         self.cost = 0                         # 代价函数
         self.parent = Parent                  # 父节点
-        self.direction = None                 # 上一个点到这里的方向
-        if Parent:
-            if Parent.direction != self.direction:
-                self.turntimes = Parent.turntimes + 1
+        self.direction = 0                    # 上一个点到这里的方向
 
     def path(self):
         """
@@ -40,7 +37,7 @@ class Board(Pattern):
         self.pattern_number = k
         self.map = []
         self.patternclasslist = []
-        for i in range(p + 1):
+        for i in range(p):
             self.patternclasslist.append([])
         for i in range(m + 2):
             self.map.append([])
@@ -61,7 +58,8 @@ class Board(Pattern):
             else:
                 r = list1.pop()
                 self.map[int(i/(self.column + 2))].append(r)
-                self.patternclasslist[r].append(Pattern(r, np.array([int(i/(self.column + 2)), i%(self.column + 2)]), None))  # 放进按照图案类型的map
+                if r != 0:
+                    self.patternclasslist[r - 1].append(Pattern(r, np.array([int(i/(self.column + 2)), i%(self.column + 2)]), None))  # 放进按照图案类型的map
         print("生成随机地图成功！")
 
     def Create_One_Board(self, boardlist):
@@ -74,7 +72,8 @@ class Board(Pattern):
                 cory = int(i%(self.column + 2)) - 1
                 r = boardlist[corx][cory]
                 self.map[corx + 1].append(r)
-                self.patternclasslist[r].append(Pattern(r, np.array([int(i/(self.column + 2)), i%(self.column + 2)]), None))  # 放进按照图案类型的map
+                if r != 0:
+                    self.patternclasslist[r - 1].append(Pattern(r, np.array([int(i/(self.column + 2)), i%(self.column + 2)]), None))  # 放进按照图案类型的map
         print("指定地图生成成功！")
 
     def SetPattern(self, pattern, x, y):
@@ -87,4 +86,3 @@ class Board(Pattern):
         self.map[x][y] = pattern
         self.patternclasslist[pattern].append(Pattern(pattern, np.array([x, y]), None))
         print("设置图案成功！")
-
