@@ -126,22 +126,34 @@ def Dot_to_Dot(Board, begin, end, limit):
 # 并且他会不断刷，直到不存在满足转弯次数==0就能消的点，返回False
 def Zeroturn_link(Board):
     link_num = -1
+    classcopy = []
     link_list = []
+    
     while link_num != 0:
         link_num = 0
         patternclass_num = Board.patternclasslist
         for class_num in patternclass_num:
             for i in range(len(class_num) - 1):
-                if(i >= len(class_num) - 1):
-                    break
+                if class_num[i].number == 0:
+                    continue
                 for j in range(i + 1, len(class_num)):
-                    if(j >= len(class_num)): # pop出去了一些节点
-                        break
+                    if class_num[j].number == 0:
+                        continue
                     path = Dot_to_Dot(Board, class_num[i], class_num[j], 0)
                     if path != False:
                         link_list.append(path)
                         link_num += 1
-                        Remove(Board, class_num, i, j)
+                        class_num[i].number = 0
+                        class_num[j].number = 0
+                        Board.map[class_num[i].position[0]][class_num[i].position[1]] = 0
+                        Board.map[class_num[j].position[0]][class_num[j].position[1]] = 0
+        for class_num in patternclass_num:
+            list0 = []
+            for i in range(len(class_num)):
+                if(class_num[i].number !=  0):
+                    list0.append(class_num[i])
+            classcopy.append(list0)
+        Board.patternclasslist = deepcopy(classcopy)
     if len(link_list) == 0:
         return False
     else: return link_list
@@ -149,22 +161,29 @@ def Zeroturn_link(Board):
 # 第一问的函数，不大于limit次转弯的就可以消除
 def limit_link(Board, limit):
     link_num = -1
+    classcopy = []
     link_list = []
     while link_num != 0:
         link_num = 0
         patternclass_num = Board.patternclasslist
         for class_num in patternclass_num:
             for i in range(len(class_num) - 1):
-                if(i >= len(class_num) - 1):
-                    break
                 for j in range(i + 1, len(class_num)):
-                    if(j >= len(class_num)): # pop出去了一些节点
-                        break
                     path = Dot_to_Dot(Board, class_num[i], class_num[j], limit)
                     if path != False:
                         link_list.append(path)
                         link_num += 1
-                        Remove(Board, class_num, i, j)
+                        class_num[i].number = 0
+                        class_num[j].number = 0
+                        Board.map[class_num[i].position[0]][class_num[i].position[1]] = 0
+                        Board.map[class_num[j].position[0]][class_num[j].position[1]] = 0
+        for class_num in patternclass_num:
+            list0 = []
+            for i in range(len(class_num)):
+                if(class_num[i].number !=  0):
+                    list0.append(class_num[i])
+            classcopy.append(list0)
+        Board.patternclasslist = deepcopy(classcopy)
     if len(link_list) == 0:
         return False
     else: return link_list
