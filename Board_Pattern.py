@@ -1,4 +1,5 @@
 import random
+from copy import deepcopy
 import numpy as np
 
 class Pattern(object):
@@ -29,8 +30,40 @@ class Pattern(object):
     def __eq__(self, other):
         return self.position == other.position
 
-class Board(Pattern):
-    def __init__(self, m, n, k, p):
+class Map(object):
+    def __init__(self, m, n, k, p,):
+        self.row = m
+        self.column = n
+        self.pattern_class = p
+        self.pattern_number = k
+        self.map:list
+        self.patternclasslist:list
+        self.parent = None
+        self.path = None
+        self.cost = 0
+
+    def mappath(self):
+        """
+        Returns list of map from this map to the root map
+        """
+        map, path_back = self, []
+        while map:
+            path_back.append(map)
+            map = map.parent
+        return list(reversed(path_back))
+    
+    def __repr__(self):
+        return "<Map (Map={})(Path={})(Cost={})>".format(self.map, self.path, self.cost)
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __eq__(self, other):
+        return self.map == other.map
+    
+
+class Board(object):
+    def __init__(self, m, n, p, k):
         self.row = m
         self.column = n
         self.pattern_class = p
@@ -86,3 +119,9 @@ class Board(Pattern):
         self.map[x][y] = pattern
         self.patternclasslist[pattern].append(Pattern(pattern, np.array([x, y]), None))
         print("设置图案成功！")
+
+def Board_tran_Map(Board):
+    aMap = Map(Board.row, Board.column, Board.pattern_class, Board.pattern_number)
+    aMap.map = deepcopy(Board.map)
+    aMap.patternclasslist = deepcopy(Board.patternclasslist)
+    return aMap

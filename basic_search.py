@@ -69,13 +69,16 @@ def Create_turntimes(Board, pattern, cor):
         p.turntimes = pattern.turntimes
     return p
 
-def Remove(Board, begin, end):
-    patternclass = begin.number
-    Board.patternclasslist[patternclass - 1].pop(begin)
-    Board.patternclasslist[patternclass - 1].pop(end)
-    Board[begin.position[0]][begin.position[1]] = 0
-    Board[end.position[0]][end.position[1]] = 0
+def Remove(Board, line, i, j): # 注意i < j
+    begin = line[i]
+    end = line[j]
+    line.pop(i)
+    line.pop(j - 1)
+    Board.map[begin.position[0]][begin.position[1]] = 0
+    Board.map[end.position[0]][end.position[1]] = 0
 
+# Dot_to_Dot函数负责测定两点之间在不超过limit次转弯的基础上能不能消除，若能返回路径，不能就返回False
+#
 def Dot_to_Dot(Board, begin, end, limit):
     # 初始化队列
     begin.cost = manhadun_cost(begin.position, end.position)
@@ -83,7 +86,7 @@ def Dot_to_Dot(Board, begin, end, limit):
     Searched = set()
     IsSearch = False
     '''
-    将Unsearch队列中的Node取出至Searched，将可能的下一个Node再排入Unsearch
+    将Unsearch队列中的pattern取出至Searched，将可能的下一个Node再排入Unsearch
     '''
     while Unsearch.empty() == 0:
         if IsSearch == True:
@@ -94,27 +97,78 @@ def Dot_to_Dot(Board, begin, end, limit):
         Searched.add(cor_tran(Board, Current_Search.position))
         # 可能的改变点
         valid_candidates = next_move(Board, Current_Search.position[0], Current_Search.position[1], end.position)
-        # 可能的新Node
         for vaild_candidate in valid_candidates:
             Next_Node = Create_turntimes(Board, Current_Search, vaild_candidate)
             if(Next_Node.turntimes > limit):
                 continue
             if all(Next_Node == end):
                 Next_Node.cost = (Board.row + 2) * (Board.column + 2) * Next_Node.turntimes
-                print(Next_Node.cost)
-                print("预消除两个点为：")
-                print(begin, end)
+                # print(Next_Node.cost)
+                # print("预消除两个点为：")
+                # print(begin,"-------------->", end)
                 IsSearch = True
                 break
 
             if((Unsearch.find(Next_Node) or Searched.__contains__(cor_tran(Board, Next_Node.position))) == False):
                 Next_Node.cost = (Board.row + 2) * (Board.column + 2) * Next_Node.turntimes + manhadun_cost(Next_Node.position, end.position)
-                print(Next_Node.cost)
-                print(Next_Node)
+                # print(Next_Node.cost)
+                # print(Next_Node)
                 Unsearch.push(Next_Node)
-        print("!")
     if IsSearch:
-        print("有信息搜索结果为：\n")
-        print(Next_Node.path())
+        # print("搜索的路径为：\n")
+        # print(Next_Node.path())
+        return (Next_Node.path())
     else:
-        print('None!Not found!')
+        # print('None!Not found a path!')
+        return False
+
+# Zeroturn_link“零刷”函数负责找到不需要转弯就能消的点，并且返回一共消的几条路径
+# 并且他会不断刷，直到不存在满足转弯次数==0就能消的点，返回False
+def Zeroturn_link(Board):
+    link_num = -1
+    link_list = []
+    while link_num != 0:
+        link_num = 0
+        patternclass_num = Board.patternclasslist
+        for class_num in patternclass_num:
+            for i in range(len(class_num) - 1):
+                if(i >= len(class_num) - 1):
+                    break
+                for j in range(i + 1, len(class_num)):
+                    if(j >= len(class_num)): # pop出去了一些节点
+                        break
+                    path = Dot_to_Dot(Board, class_num[i], class_num[j], 0)
+                    if path != False:
+                        link_list.append(path)
+                        link_num += 1
+                        Remove(Board, class_num, i, j)
+    if len(link_list) == 0:
+        return False
+    else: return link_list
+
+# 第一问的函数，不大于limit次转弯的就可以消除
+def limit_link(Board, limit):
+    link_num = -1
+    link_list = []
+    while link_num != 0:
+        link_num = 0
+        patternclass_num = Board.patternclasslist
+        for class_num in patternclass_num:
+            for i in range(len(class_num) - 1):
+                if(i >= len(class_num) - 1):
+                    break
+                for j in range(i + 1, len(class_num)):
+                    if(j >= len(class_num)): # pop出去了一些节点
+                        break
+                    path = Dot_to_Dot(Board, class_num[i], class_num[j], limit)
+                    if path != False:
+                        link_list.append(path)
+                        link_num += 1
+                        Remove(Board, class_num, i, j)
+    if len(link_list) == 0:
+        return False
+    else: return link_list
+
+
+                    
+
