@@ -8,7 +8,8 @@ def map_tran(Map):
     result = 0
     for i in range(1, Map.row):
         for j in range(1, Map.column):
-            result += Map.map[i][j] * ((Map.pattern_class + 1) ** ((Map.column) * (i - 1) + j - 1))
+            if Map.map[i][j] != 0:
+                result += 2 ** ((Map.column) * (i - 1) + j - 1)
     return result
 
 # 返回的是一个充满Map的列表
