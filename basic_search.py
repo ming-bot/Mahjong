@@ -69,7 +69,7 @@ def Create_turntimes(Board, pattern, cor):
         p.turntimes = pattern.turntimes
     return p
 
-def Remove(Board, line, i, j): # 注意i < j
+def Remove(Board, line, i, j):
     begin = line[i]
     end = line[j]
     line.pop(i)

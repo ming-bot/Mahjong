@@ -8,8 +8,8 @@ if __name__ == "__main__":
     # n = input("请输入地图的宽：")
     # p = input("请输入图案的种类：")
     # k = input("请输入图案的数目：")  # 这里还要处理输入数据是否合法
-    board = Board(6, 6, 4, 12)
-    mymap = np.array([[1,3,1,4,3,0],[1,1,4,3,2,0],[2,3,2,0,0,4],[4,2,4,0,1,2],[1,1,1,0,4,2],[2,3,2,0,0,4]])
+    board = Board(5, 5, 2, 12)
+    mymap = np.array([[1,2,1,2,1],[2,1,2,1,2],[1,2,1,2,1],[2,1,2,1,2],[1,2,1,2,0]])
     board.Create_One_Board(mymap)
     print(board.map)
     print(board.patternclasslist)

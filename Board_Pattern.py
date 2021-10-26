@@ -110,14 +110,15 @@ class Board(object):
         print("指定地图生成成功！")
 
     def SetPattern(self, pattern, x, y):
-        if(pattern < 0 or pattern > self.pattern_class):
+        if(pattern < -1 or pattern > self.pattern_class):
             print("Error404：图案查找失败！")
             return
         if(x<= 0 or x >= self.row or y <= 0 or y >= self.column):
             print("Error303：超出边界！")
             return
         self.map[x][y] = pattern
-        self.patternclasslist[pattern].append(Pattern(pattern, np.array([x, y]), None))
+        if pattern > 0:
+            self.patternclasslist[pattern].append(Pattern(pattern, np.array([x, y]), None))
         print("设置图案成功！")
 
 def Board_tran_Map(Board):
