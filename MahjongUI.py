@@ -32,9 +32,6 @@ class Ui_Form(object):
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
         self.horizontalLayout_5.addWidget(self.label_6)
-        self.timeEdit = QtWidgets.QTimeEdit(Form)
-        self.timeEdit.setObjectName("timeEdit")
-        self.horizontalLayout_5.addWidget(self.timeEdit)
         self.horizontalLayout_6.addLayout(self.horizontalLayout_5)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem)
@@ -185,7 +182,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Mahjong/made by ming-bot"))
         self.label_6.setText(_translate("Form", "计时："))
         self.label_5.setText(_translate("Form", "当前代价：0"))
         self.GameMode.setItemText(0, _translate("Form", "经典模式"))

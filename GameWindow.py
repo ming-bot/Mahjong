@@ -1,11 +1,6 @@
 from MahjongUI import *
-# from PyQt5.QtWidgets import (QWidget, QPushButton,
-#     QHBoxLayout, QVBoxLayout, QApplication)
 import time
 from PyQt5.Qt import *
-from Board_Pattern import *
-from basic_search import *
-from totalSearch import *
 from main import *
 import numpy as np
 import sys
@@ -15,6 +10,7 @@ import sys
 class EliminateThread(QThread):
     EliminateFinished = pyqtSignal()
     CostSignal = pyqtSignal(str)
+
     def __init__(self, tbw_game=None, unit_path=None):
         super(EliminateThread, self).__init__()
         self.tbw_game = tbw_game
@@ -57,6 +53,7 @@ class EliminateThread(QThread):
 
         self.EliminateFinished.emit()
 
+
 class GameWindow(QtWidgets.QWidget, Ui_Form):
     def __init__(self):
         super(GameWindow, self).__init__()
@@ -75,8 +72,12 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
         self.tableWidget.setShowGrid(False)  # 隐藏线
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)  # 不可更改
 
-        self.board: Board()
+        self.board = Board(0,0,0,0)
         self.mode = 0
+
+        timer = QTimer(self)
+        timer.timeout.connect(self.showtime)
+        timer.start()
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message', "Are you sure to quit?", QMessageBox.Yes |
@@ -166,6 +167,7 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
         self.begin_button.setEnabled(False)
         self.oneboard.setEnabled(False)
         self.label_5.setText("当前代价：0")
+        self.imag_show_function()
         self.SThread = SolveThread(self.board, self.mode)
         self.SThread.start()
         self.SThread.Solved.connect(self.GameSolved)
@@ -188,6 +190,21 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
 
     def UpdateCost(self, cost):
         self.label_5.setText("当前代价：" + cost)
+
+    def showtime(self):
+        datetime = QDateTime.currentDateTime()
+        text = datetime.toString()
+        self.label_6.setText(text)
+
+    def imag_show_function(self):
+        dialog_fault = QDialog()
+        image_path = "./JEPG/pay.jpg"
+        pic = QPixmap(image_path)
+        dialog_fault.setWindowTitle("哈哈哈:)")
+        label_pic = QLabel("show", dialog_fault)
+        label_pic.setPixmap(pic)
+        label_pic.setGeometry(20, 10, 200, 300)
+        dialog_fault.exec_()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
