@@ -72,10 +72,10 @@ def Create_turntimes(Board, pattern, cor):
 def Remove(Board, line, i, j):
     begin = line[i]
     end = line[j]
-    line.pop(i)
-    line.pop(j - 1)
     Board.map[begin.position[0]][begin.position[1]] = 0
     Board.map[end.position[0]][end.position[1]] = 0
+    line.pop(i)
+    line.pop(j - 1)
 
 # Dot_to_Dot函数负责测定两点之间在不超过limit次转弯的基础上能不能消除，若能返回路径，不能就返回False
 #
@@ -147,19 +147,22 @@ def Zeroturn_link(Board):
                         class_num[j].number = 0
                         Board.map[class_num[i].position[0]][class_num[i].position[1]] = 0
                         Board.map[class_num[j].position[0]][class_num[j].position[1]] = 0
-        for class_num in patternclass_num:
-            list0 = []
-            for i in range(len(class_num)):
-                if(class_num[i].number !=  0):
-                    list0.append(class_num[i])
-            classcopy.append(list0)
-        Board.patternclasslist = deepcopy(classcopy)
+                        break
+    for class_num in patternclass_num:
+        list0 = []
+        for i in range(len(class_num)):
+            if(class_num[i].number !=  0):
+                list0.append(class_num[i])
+        classcopy.append(list0)
+    Board.patternclasslist = deepcopy(classcopy)
+    classcopy.clear()
     if len(link_list) == 0:
         return False
     else: return link_list
 
 # 第一问的函数，不大于limit次转弯的就可以消除
 def limit_link(Board, limit):
+    returnlist = []
     link_num = -1
     classcopy = []
     link_list = []
@@ -168,7 +171,11 @@ def limit_link(Board, limit):
         patternclass_num = Board.patternclasslist
         for class_num in patternclass_num:
             for i in range(len(class_num) - 1):
+                if class_num[i].number == 0:
+                    continue
                 for j in range(i + 1, len(class_num)):
+                    if class_num[j].number == 0:
+                        continue
                     path = Dot_to_Dot(Board, class_num[i], class_num[j], limit)
                     if path != False:
                         link_list.append(path)
@@ -177,6 +184,7 @@ def limit_link(Board, limit):
                         class_num[j].number = 0
                         Board.map[class_num[i].position[0]][class_num[i].position[1]] = 0
                         Board.map[class_num[j].position[0]][class_num[j].position[1]] = 0
+                        break
         for class_num in patternclass_num:
             list0 = []
             for i in range(len(class_num)):
@@ -184,10 +192,13 @@ def limit_link(Board, limit):
                     list0.append(class_num[i])
             classcopy.append(list0)
         Board.patternclasslist = deepcopy(classcopy)
+        classcopy.clear()
     if len(link_list) == 0:
         return False
-    else: return link_list
-
-
-                    
-
+    else:
+        finalmap = Map(Board.row, Board.column, Board.pattern_class, Board.pattern_number)
+        finalmap.map = deepcopy(Board.map)
+        finalmap.patternclasslist = deepcopy(Board.patternclasslist)
+        finalmap.path = deepcopy(link_list)
+        returnlist.append(finalmap)
+        return returnlist

@@ -31,7 +31,7 @@ class Pattern(object):
         return self.position == other.position
 
 class Map(object):
-    def __init__(self, m, n, k, p,):
+    def __init__(self, m, n, p, k):
         self.row = m
         self.column = n
         self.pattern_class = p
@@ -39,8 +39,12 @@ class Map(object):
         self.map:list
         self.patternclasslist:list
         self.parent = None
-        self.path = None
+        self.path = []
         self.cost = 0
+        self.beibeicost = []
+        self.i_cost = 0
+        for i in range(p):
+            self.beibeicost.append(0)
 
     def mappath(self):
         """
@@ -53,7 +57,7 @@ class Map(object):
         return list(reversed(path_back))
     
     def __repr__(self):
-        return "<Map (Map={})(Path={})(Cost={})>".format(self.map, self.path, self.cost)
+        return "<Map (Map={})(Path={})(Cost={})>\n".format(self.map, self.path, self.i_cost/(self.pattern_number + 1))
 
     def __lt__(self, other):
         return self.cost < other.cost
@@ -91,7 +95,7 @@ class Board(object):
             else:
                 r = list1.pop()
                 self.map[int(i/(self.column + 2))].append(r)
-                if r != 0:
+                if r > 0:
                     self.patternclasslist[r - 1].append(Pattern(r, np.array([int(i/(self.column + 2)), i%(self.column + 2)]), None))  # 放进按照图案类型的map
         print("生成随机地图成功！")
 
@@ -105,7 +109,7 @@ class Board(object):
                 cory = int(i%(self.column + 2)) - 1
                 r = boardlist[corx][cory]
                 self.map[corx + 1].append(r)
-                if r != 0:
+                if r > 0:
                     self.patternclasslist[r - 1].append(Pattern(r, np.array([int(i/(self.column + 2)), i%(self.column + 2)]), None))  # 放进按照图案类型的map
         print("指定地图生成成功！")
 
@@ -121,8 +125,9 @@ class Board(object):
             self.patternclasslist[pattern].append(Pattern(pattern, np.array([x, y]), None))
         print("设置图案成功！")
 
-def Board_tran_Map(Board):
+def Map_to_Map(Board):
     aMap = Map(Board.row, Board.column, Board.pattern_class, Board.pattern_number)
     aMap.map = deepcopy(Board.map)
     aMap.patternclasslist = deepcopy(Board.patternclasslist)
+    aMap.beibeicost = deepcopy(Board.beibeicost)
     return aMap
