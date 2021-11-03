@@ -97,7 +97,6 @@ class Board(object):
                 self.map[int(i/(self.column + 2))].append(r)
                 if r > 0:
                     self.patternclasslist[r - 1].append(Pattern(r, np.array([int(i/(self.column + 2)), i%(self.column + 2)]), None))  # 放进按照图案类型的map
-        print("生成随机地图成功！")
 
     def Create_One_Board(self, boardlist):
         for i in range((self.row + 2)*(self.column + 2)):
@@ -111,7 +110,6 @@ class Board(object):
                 self.map[corx + 1].append(r)
                 if r > 0:
                     self.patternclasslist[r - 1].append(Pattern(r, np.array([int(i/(self.column + 2)), i%(self.column + 2)]), None))  # 放进按照图案类型的map
-        print("指定地图生成成功！")
 
     def SetPattern(self, pattern, x, y):
         if(pattern < -1 or pattern > self.pattern_class):

@@ -83,7 +83,7 @@ def FakeLeastcost_link(Board):
     init.patternclasslist = deepcopy(Board.patternclasslist)
     for index, item in enumerate(init.patternclasslist):
         init.beibeicost[index] = est_cost(item)
-    init.i_cost = init.pattern_number       # 最初的代价
+    init.i_cost = init.pattern_number      # 最初的代价
     list0 = Zeroturn_link(Board)           # 第一次零刷
     if list0 != False:                     # 零刷更新
         firststep = Map(Board.row, Board.column, Board.pattern_class, Board.pattern_number)  # 最初的Map

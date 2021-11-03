@@ -74,6 +74,7 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
 
         self.board = Board(0,0,0,0)
         self.mode = 0
+        self.autoSolve.setEnabled(False)
 
         timer = QTimer(self)
         timer.timeout.connect(self.showtime)
@@ -94,6 +95,7 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
         painter.drawPixmap(self.rect(), pixmap)
 
     def slot_oneboard_clicked(self):
+        self.autoSolve.setEnabled(True)
         m = int(self.lineEdit.text())
         n = int(self.lineEdit_2.text())
         p = int(self.lineEdit_3.text())
@@ -122,13 +124,14 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
             for j in range(n + 2):
                 item = QTableWidgetItem()
                 kind = self.board.map[i][j]
-                if kind > 0:
+                if kind > -2:
                     item.setIcon(QIcon(QPixmap("./JEPG/" + str(kind) + ".jpg")))
                     self.tableWidget.setItem(i, j, item)
                 else:
                     self.tableWidget.setItem(i, j, item)
 
     def slot_begin_button_clicked(self):
+        self.autoSolve.setEnabled(True)
         m = int(self.lineEdit.text())
         n = int(self.lineEdit_2.text())
         p = int(self.lineEdit_3.text())
@@ -145,12 +148,12 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
         self.tableWidget.setRowCount(m + 2)
         self.tableWidget.setColumnCount(n + 2)
         # 设置总大小和各个格子大小
-        self.tableWidget.setFixedSize((n + 2) * 50 + 2, (m + 2) * 50 + 2)
+        self.tableWidget.setFixedSize((n + 2) * 70 + 2, (m + 2) * 70 + 2)
         for i in range(m + 2):
-            self.tableWidget.setRowHeight(i, 50)
+            self.tableWidget.setRowHeight(i, 70)
         for j in range(n + 2):
-            self.tableWidget.setColumnWidth(j, 50)
-        self.tableWidget.setIconSize(QSize(45, 45))
+            self.tableWidget.setColumnWidth(j, 70)
+        self.tableWidget.setIconSize(QSize(65, 65))
         # 放置图片
         for i in range(m + 2):
             for j in range(n + 2):
@@ -180,7 +183,6 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
         self.EThread.EliminateFinished.connect(self.EliminateFinished)
 
     def EliminateFinished(self):
-        self.autoSolve.setEnabled(True)
         self.begin_button.setEnabled(True)
         self.oneboard.setEnabled(True)
 
