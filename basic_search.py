@@ -78,7 +78,6 @@ def Remove(Board, line, i, j):
     line.pop(j - 1)
 
 # Dot_to_Dot函数负责测定两点之间在不超过limit次转弯的基础上能不能消除，若能返回路径，不能就返回False
-#
 def Dot_to_Dot(Board, begin, end, limit):
     # 初始化队列
     begin.cost = manhadun_cost(begin.position, end.position)

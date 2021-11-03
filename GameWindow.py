@@ -4,6 +4,7 @@ from PyQt5.Qt import *
 from main import *
 import numpy as np
 import sys
+import resource
 
 
 # 消除动画的线程
@@ -33,8 +34,8 @@ class EliminateThread(QThread):
                 x2 = link_line[-1].position[0]
                 y2 = link_line[-1].position[1]
 
-                self.tbw_game.item(x1, y1).setIcon(QIcon("./JEPG/0.jpg"))
-                self.tbw_game.item(x2, y2).setIcon(QIcon("./JEPG/0.jpg"))
+                self.tbw_game.item(x1, y1).setIcon(QIcon(":/JEPG/JEPG/0.jpg"))
+                self.tbw_game.item(x2, y2).setIcon(QIcon(":/JEPG/JEPG/0.jpg"))
                 self.tbw_game.viewport().update()
 
                 # 恢复颜色
@@ -60,7 +61,7 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
         self.setupUi(self)
         self.SThread = SolveThread()
         self.EThread = EliminateThread()
-        self.setWindowIcon(QIcon('./JEPG/id.jpg'))
+        self.setWindowIcon(QIcon(':/JEPG/JEPG/id.jpg'))
         self.cost = 0
 
         pll = self.tableWidget.palette()
@@ -91,7 +92,7 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
     def paintEvent(self, event):  # set background_img
         painter = QPainter(self)
         painter.drawRect(self.rect())
-        pixmap = QPixmap('./JEPG/background.jpg')  # 换成自己的图片的相对路径
+        pixmap = QPixmap(':/JEPG/JEPG/background.jpg')  # 换成自己的图片的相对路径
         painter.drawPixmap(self.rect(), pixmap)
 
     def slot_oneboard_clicked(self):
@@ -125,7 +126,7 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
                 item = QTableWidgetItem()
                 kind = self.board.map[i][j]
                 if kind > -2:
-                    item.setIcon(QIcon(QPixmap("./JEPG/" + str(kind) + ".jpg")))
+                    item.setIcon(QIcon(QPixmap(":/JEPG/JEPG/" + str(kind) + ".jpg")))
                     self.tableWidget.setItem(i, j, item)
                 else:
                     self.tableWidget.setItem(i, j, item)
@@ -160,7 +161,7 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
                 item = QTableWidgetItem()
                 kind = self.board.map[i][j]
                 if kind > 0:
-                    item.setIcon(QIcon(QPixmap("./JEPG/" + str(kind) + ".jpg")))
+                    item.setIcon(QIcon(QPixmap(":/JEPG/JEPG/" + str(kind) + ".jpg")))
                     self.tableWidget.setItem(i, j, item)
                 else:
                     self.tableWidget.setItem(i, j, item)
@@ -200,7 +201,7 @@ class GameWindow(QtWidgets.QWidget, Ui_Form):
 
     def imag_show_function(self):
         dialog_fault = QDialog()
-        image_path = "./JEPG/pay.jpg"
+        image_path = ":/JEPG/JEPG/pay.jpg"
         pic = QPixmap(image_path)
         dialog_fault.setWindowTitle("哈哈哈:)")
         label_pic = QLabel("show", dialog_fault)
