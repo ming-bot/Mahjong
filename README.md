@@ -1,4 +1,4 @@
-# $Mahjong$
+# Mahjong
 
 本文档记录连连看大作业的完成过程，以日期版本更新迭代。
 
@@ -6,7 +6,7 @@
 
 10.26大致完成主体框架，下面依次介绍。
 
-#### $Board\_Pattern.py$
+#### Board\_Pattern.py
 
 本代码中主要定义三个基本类：
 
@@ -46,7 +46,7 @@
 
 
 
-#### $basic\_search.py$
+#### basic\_search.py
 
 本代码中主要描述了基本的搜索方法。
 
@@ -63,7 +63,7 @@
 
 
 
-#### $totalSearch.py$
+#### totalSearch.py
 
 两个方法
 
